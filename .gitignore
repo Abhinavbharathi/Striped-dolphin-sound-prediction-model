@@ -1,0 +1,32 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Node / frontend cache (if any)
+node_modules/
+
+# Docker
+*.tar
+
+# Streamlit cache
+.streamlit/
+
+# Model artifacts (optional: keep model if small)
+# Uncomment below ONLY if model is very large
+# models/*.pth
