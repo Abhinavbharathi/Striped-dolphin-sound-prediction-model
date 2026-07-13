@@ -1,8 +1,19 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
 from audio_utils import audio_to_spectrogram
 from model import predict
 
 app = FastAPI(title="Dolphin Sound Classification API")
+
+# Allow requests from the frontend (Vercel)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace "*" with your Vercel URL after deployment
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
@@ -15,15 +26,15 @@ async def predict_audio(file: UploadFile = File(...)):
     try:
         print("✅ Received request")
 
-        # Read file ONCE
+        # Read uploaded audio file
         audio_bytes = await file.read()
         print("✅ Audio read, size:", len(audio_bytes))
 
-        # Convert to spectrogram
+        # Convert audio to spectrogram
         spectrogram = audio_to_spectrogram(audio_bytes)
         print("✅ Spectrogram created")
 
-        # Predict
+        # Run prediction
         prediction = predict(spectrogram)
         print("✅ Prediction done:", prediction)
 
@@ -35,5 +46,5 @@ async def predict_audio(file: UploadFile = File(...)):
         print("❌ Backend error:", str(e))
         raise HTTPException(
             status_code=500,
-            detail="Audio processing failed"
+            detail=f"Audio processing failed: {str(e)}"
         )
