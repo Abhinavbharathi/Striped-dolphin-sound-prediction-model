@@ -10,16 +10,17 @@ RUN apt-get update && apt-get install -y \
     libsndfile1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy backend requirements and install Python dependencies
-COPY backend/requirements.txt .
+# Copy requirements file
+COPY requirements.txt .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code and model files
-COPY backend ./backend
-COPY models ./models
+# Copy all backend files
+COPY . .
 
-# Expose Render's required port
-EXPOSE 10000
+# Expose Railway port (optional, Railway sets PORT automatically)
+EXPOSE 8000
 
-# Start FastAPI server
-CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "10000"]
+# Start FastAPI application
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]
