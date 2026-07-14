@@ -7,7 +7,7 @@ from PIL import Image
 
 # ---------- Path handling ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "best_resnet34.pth")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "best_resnet34.pth")
 
 device = "cpu"
 
@@ -19,7 +19,7 @@ model.conv1 = nn.Conv2d(
     1, 64, kernel_size=7, stride=2, padding=3, bias=False
 )
 
-# ⚠️ IMPORTANT: Sequential FC (matches your checkpoint)
+# IMPORTANT: Sequential FC (matches your checkpoint)
 model.fc = nn.Sequential(
     nn.Dropout(0.3),
     nn.Linear(model.fc.in_features, len(CLASS_NAMES))
